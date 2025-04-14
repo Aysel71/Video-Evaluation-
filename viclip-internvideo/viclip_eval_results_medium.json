@@ -1,0 +1,55 @@
+========================================
+Evaluation on video type: medium
+========================================
+--- Video Domains ---
+Knowledge: 29.5%
+Film & Television: 42.9%
+Sports Competition: 31.0%
+Artistic Performance: 40.7%
+Life Record: 31.2%
+Multilingual: 37.5%
+--- Subcategories ---
+Humanity & History: 26.7%
+Literature & Art: 25.0%
+Biology & Medicine: 33.3%
+Finance & Commerce: 23.3%
+Astronomy: 37.0%
+Geography: 43.3%
+Law: 26.7%
+Life Tip: 26.7%
+Technology: 23.3%
+Animation: 33.3%
+Movie & TV Show: 40.7%
+Documentary: 44.4%
+News Report: 50.0%
+Esports: 8.3%
+Basketball: 33.3%
+Football: 37.0%
+Athletics: 22.2%
+Other Sports: 38.9%
+Stage Play: 66.7%
+Magic Show: 41.7%
+Variety Show: 29.6%
+Acrobatics: 33.3%
+Handicraft: 33.3%
+Food: 26.7%
+Fashion: 33.3%
+Daily Life: 30.0%
+Travel: 30.0%
+Pet & Animal: 33.3%
+Exercise: 33.3%
+Multilingual: 37.5%
+--- Task Types ---
+Temporal Perception: 32.1%
+Spatial Perception: 40.0%
+Attribute Perception: 36.5%
+Action Recognition: 35.6%
+Object Recognition: 36.0%
+OCR Problems: 29.6%
+Counting Problem: 18.7%
+Temporal Reasoning: 27.0%
+Spatial Reasoning: 50.0%
+Action Reasoning: 24.5%
+Object Reasoning: 31.1%
+Information Synopsis: 55.7%
+✅ Overall Accuracy: 33.5%
