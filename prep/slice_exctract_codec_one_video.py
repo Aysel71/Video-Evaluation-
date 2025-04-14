@@ -4,6 +4,7 @@ import numpy as np
 import pysubs2
 import torch
 import json
+import argparse
 from torchcodec.decoders import VideoDecoder
 from torchvision.utils import save_image
 
@@ -75,7 +76,6 @@ def slice_frames(video_path, srt_path, num_frames, output_root):
         json.dump(json_output, jf, indent=2, ensure_ascii=False)
 
 def parse_args():
-    import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--video_path", type=str, required=True)
     parser.add_argument("--srt_path", type=str, default=None)
