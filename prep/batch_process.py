@@ -30,7 +30,7 @@ def batch_process(videos_dir, subtitles_dir, output_dir, num_frames=16):
         srt_path = os.path.join(subtitles_dir, f"{video_id}.srt")
 
         if not os.path.exists(srt_path):
-            msg = f"⚠️  No subtitle file for {video_id}, skipping."
+            msg = f" No subtitle file for {video_id}, skipping."
             print(msg)
             log_lines.append(msg)
             total_skipped += 1
