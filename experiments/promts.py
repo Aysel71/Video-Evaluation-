@@ -604,7 +604,7 @@ if __name__ == "__main__":
     # Parameters
     PARQUET_FILE = "/workspace/data/Video-MME/videomme/test-00000-of-00001.parquet"
     CAPTIONS_BASE_PATH = "/workspace/data/Video-MME/output"
-    API_KEY = "fw_3ZTYfDqnj6VXpbMAutpHmzVG"
+    API_KEY = "API_KEY"
     OUTPUT_FILE = "video_qa_results_with_captions.json"
     
     # Run QA with captions
