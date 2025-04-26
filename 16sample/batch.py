@@ -104,6 +104,6 @@ def batch_process(videos_dir, subtitles_dir, output_dir, step=16):
 if __name__ == "__main__":
     videos_dir = "/mnt/public-datasets/a.mirzoeva/Video-MME/videos"
     subtitles_dir = "/mnt/public-datasets/a.mirzoeva/Video-MME/subtitles"
-    output_dir = "/mnt/public-datasets/a.mirzoeva/Video-MME/output"
+    output_dir = "/mnt/public-datasets/a.mirzoeva/Video-MME/output1"
 
     batch_process(videos_dir, subtitles_dir, output_dir, step=16)
