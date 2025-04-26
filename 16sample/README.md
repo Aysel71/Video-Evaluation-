@@ -1,7 +1,3 @@
-Sure! Below is a `README.md` template for your GitHub repository based on the provided details about the code and its changes:
-
----
-
 # Video Frame Extraction (Every 16th Frame)
 
 This repository contains a Python script designed for extracting frames from videos, specifically extracting every 16th frame starting from the first frame. The extraction logic has been modified to allow flexibility in selecting frames at a custom interval, with the default step set to 16 frames. This approach allows for easier manipulation and processing of video data by selecting frames at regular intervals.
@@ -138,7 +134,3 @@ Feel free to fork the repository and submit pull requests for improvements or ne
 ## License
 
 This project is licensed under the MIT License.
-
----
-
-This `README.md` should give users a clear understanding of how to use the code and how the extraction logic works, as well as how to customize the frame extraction step through command-line arguments.
