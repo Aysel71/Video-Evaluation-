@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek Performance Comparison Dashboard</title>
+    
+    <!-- Wait for all libraries to load before executing code -->
+    <script>
+        window.onload = function() {
+            console.log("Window loaded");
+        }
+    </script>
+    
+    <!-- Add Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Add React and ReactDOM -->
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    
+    <!-- Add Recharts and its dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.8.1/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.9.0/Recharts.min.js"></script>
+    
+    <!-- Add Babel for JSX transformation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.2/babel.min.js"></script>
+</head>
+<body>
+    <div id="root">Loading dashboard...</div>
+
+    <script type="text/babel">
+        // Ensure all libraries are available
+        if (!React || !ReactDOM || !Recharts) {
+            document.getElementById('root').innerHTML = 'Error: Required libraries not loaded. Please check your internet connection.';
+        } else {
+            console.log("Libraries loaded successfully");
+        }
+
+        const { useState } = React;
+        const { 
+            BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+            LineChart, Line, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
+        } = Recharts;
+
+        const DashboardApp = () => {
+            const [activeTab, setActiveTab] = useState('overview');
+            
+            // Data for DeepSeek with frames
+            const withFramesData = {
+                overall: {
+                    short: 47.8,
+                    medium: 47.0,
+                    long: 48.4,
+                    all: 47.7
+                },
+                categories: {
+                    short: {
+                        "Knowledge": 56.7,
+                        "Film & Television": 49.2,
+                        "Sports Competition": 36.0,
+                        "Artistic Performance": 45.0,
+                        "Life Record": 46.7,
+                        "Multilingual": 40.0
+                    },
+                    medium: {
+                        "Knowledge": 51.5,
+                        "Film & Television": 48.3,
+                        "Sports Competition": 44.0,
+                        "Artistic Performance": 47.5,
+                        "Life Record": 41.0,
+                        "Multilingual": 56.7
+                    },
+                    long: {
+                        "Knowledge": 53.3,
+                        "Film & Television": 54.2,
+                        "Sports Competition": 48.7,
+                        "Artistic Performance": 45.8,
+                        "Life Record": 41.0,
+                        "Multilingual": 43.3
+                    },
+                    all: {
+                        "Knowledge": 53.8,
+                        "Film & Television": 50.6,
+                        "Sports Competition": 42.9,
+                        "Artistic Performance": 46.1,
+                        "Life Record": 42.9,
+                        "Multilingual": 46.7
+                    }
+                },
+                tasks: {
+                    short: {
+                        "Temporal Perception": 66.7,
+                        "Spatial Perception": 36.7,
+                        "Attribute Perception": 45.1,
+                        "Action Recognition": 45.0,
+                        "Object Recognition": 41.7,
+                        "OCR Problems": 45.6,
+                        "Counting Problem": 39.2,
+                        "Temporal Reasoning": 53.8,
+                        "Spatial Reasoning": 63.0,
+                        "Action Reasoning": 63.8,
+                        "Object Reasoning": 47.5,
+                        "Information Synopsis": 68.3
+                    },
+                    medium: {
+                        "Temporal Perception": 41.9,
+                        "Spatial Perception": 52.4,
+                        "Attribute Perception": 38.4,
+                        "Action Recognition": 40.3,
+                        "Object Recognition": 50.8,
+                        "OCR Problems": 39.7,
+                        "Counting Problem": 30.5,
+                        "Temporal Reasoning": 39.7,
+                        "Spatial Reasoning": 38.9,
+                        "Action Reasoning": 55.2,
+                        "Object Reasoning": 61.2,
+                        "Information Synopsis": 64.1
+                    },
+                    long: {
+                        "Temporal Perception": 66.7,
+                        "Spatial Perception": 33.3,
+                        "Attribute Perception": 66.7,
+                        "Action Recognition": 42.9,
+                        "Object Recognition": 35.2,
+                        "OCR Problems": 35.7,
+                        "Counting Problem": 33.3,
+                        "Temporal Reasoning": 37.4,
+                        "Spatial Reasoning": 45.5,
+                        "Action Reasoning": 47.8,
+                        "Object Reasoning": 52.9,
+                        "Information Synopsis": 57.7
+                    },
+                    all: {
+                        "Temporal Perception": 52.7,
+                        "Spatial Perception": 42.6,
+                        "Attribute Perception": 45.5,
+                        "Action Recognition": 42.8,
+                        "Object Recognition": 44.1,
+                        "OCR Problems": 41.7,
+                        "Counting Problem": 35.1,
+                        "Temporal Reasoning": 39.5,
+                        "Spatial Reasoning": 51.8,
+                        "Action Reasoning": 51.9,
+                        "Object Reasoning": 54.4,
+                        "Information Synopsis": 61.9
+                    }
+                }
+            };
+
+            // Data for regular DeepSeek
+            const regularData = {
+                overall: {
+                    short: 43.4,
+                    medium: 48.4,
+                    long: 49.6,
+                    all: 47.1
+                },
+                categories: {
+                    short: {
+                        "Knowledge": 50.4,
+                        "Film & Television": 45.0,
+                        "Sports Competition": 37.3,
+                        "Artistic Performance": 45.0,
+                        "Life Record": 37.1,
+                        "Multilingual": 43.3
+                    },
+                    medium: {
+                        "Knowledge": 53.0,
+                        "Film & Television": 46.7,
+                        "Sports Competition": 47.3,
+                        "Artistic Performance": 46.7,
+                        "Life Record": 45.2,
+                        "Multilingual": 50.0
+                    },
+                    long: {
+                        "Knowledge": 57.0,
+                        "Film & Television": 55.8,
+                        "Sports Competition": 48.0,
+                        "Artistic Performance": 49.2,
+                        "Life Record": 40.0,
+                        "Multilingual": 33.3
+                    },
+                    all: {
+                        "Knowledge": 53.5,
+                        "Film & Television": 49.2,
+                        "Sports Competition": 44.2,
+                        "Artistic Performance": 46.9,
+                        "Life Record": 40.8,
+                        "Multilingual": 42.2
+                    }
+                },
+                tasks: {
+                    short: {
+                        "Temporal Perception": 44.4,
+                        "Spatial Perception": 50.0,
+                        "Attribute Perception": 32.8,
+                        "Action Recognition": 44.3,
+                        "Object Recognition": 33.3,
+                        "OCR Problems": 45.6,
+                        "Counting Problem": 40.0,
+                        "Temporal Reasoning": 61.5,
+                        "Spatial Reasoning": 44.4,
+                        "Action Reasoning": 57.4,
+                        "Object Reasoning": 48.8,
+                        "Information Synopsis": 63.4
+                    },
+                    medium: {
+                        "Temporal Perception": 38.7,
+                        "Spatial Perception": 47.6,
+                        "Attribute Perception": 49.3,
+                        "Action Recognition": 47.1,
+                        "Object Recognition": 36.4,
+                        "OCR Problems": 36.8,
+                        "Counting Problem": 43.2,
+                        "Temporal Reasoning": 50.7,
+                        "Spatial Reasoning": 44.4,
+                        "Action Reasoning": 67.2,
+                        "Object Reasoning": 52.2,
+                        "Information Synopsis": 69.2
+                    },
+                    long: {
+                        "Temporal Perception": 50.0,
+                        "Spatial Perception": 33.3,
+                        "Attribute Perception": 59.3,
+                        "Action Recognition": 49.2,
+                        "Object Recognition": 40.7,
+                        "OCR Problems": 28.6,
+                        "Counting Problem": 25.0,
+                        "Temporal Reasoning": 36.3,
+                        "Spatial Reasoning": 63.6,
+                        "Action Reasoning": 52.2,
+                        "Object Reasoning": 51.7,
+                        "Information Synopsis": 60.7
+                    },
+                    all: {
+                        "Temporal Perception": 41.8,
+                        "Spatial Perception": 48.1,
+                        "Attribute Perception": 41.4,
+                        "Action Recognition": 46.3,
+                        "Object Recognition": 35.6,
+                        "OCR Problems": 39.6,
+                        "Counting Problem": 38.4,
+                        "Temporal Reasoning": 44.1,
+                        "Spatial Reasoning": 48.2,
+                        "Action Reasoning": 56.1,
+                        "Object Reasoning": 51.3,
+                        "Information Synopsis": 63.5
+                    }
+                }
+            };
+
+            // Calculate differences
+            const calcDifference = (a, b) => {
+                return parseFloat((a - b).toFixed(1));
+            };
+
+            // Prepare data for the charts
+            const prepareOverallData = () => {
+                return [
+                    { name: 'Short', withFrames: withFramesData.overall.short, regular: regularData.overall.short, diff: calcDifference(withFramesData.overall.short, regularData.overall.short) },
+                    { name: 'Medium', withFrames: withFramesData.overall.medium, regular: regularData.overall.medium, diff: calcDifference(withFramesData.overall.medium, regularData.overall.medium) },
+                    { name: 'Long', withFrames: withFramesData.overall.long, regular: regularData.overall.long, diff: calcDifference(withFramesData.overall.long, regularData.overall.long) },
+                    { name: 'All', withFrames: withFramesData.overall.all, regular: regularData.overall.all, diff: calcDifference(withFramesData.overall.all, regularData.overall.all) }
+                ];
+            };
+
+            const prepareCategoryData = (durationType) => {
+                const categories = Object.keys(withFramesData.categories.all);
+                return categories.map(category => ({
+                    name: category,
+                    withFrames: withFramesData.categories[durationType][category],
+                    regular: regularData.categories[durationType][category],
+                    diff: calcDifference(withFramesData.categories[durationType][category], regularData.categories[durationType][category])
+                }));
+            };
+
+            const prepareTaskData = (durationType) => {
+                const tasks = Object.keys(withFramesData.tasks.all);
+                return tasks.map(task => ({
+                    name: task,
+                    withFrames: withFramesData.tasks[durationType][task],
+                    regular: regularData.tasks[durationType][task],
+                    diff: calcDifference(withFramesData.tasks[durationType][task], regularData.tasks[durationType][task])
+                }));
+            };
+
+            // Find best and worst performers
+            const findBestWorst = () => {
+                const allCategories = prepareCategoryData('all');
+                const allTasks = prepareTaskData('all');
+                
+                // Sort by difference (positive means withFrames is better)
+                const sortedCategories = [...allCategories].sort((a, b) => b.diff - a.diff);
+                const sortedTasks = [...allTasks].sort((a, b) => b.diff - a.diff);
+                
+                return {
+                    categoryBest: sortedCategories[0],
+                    categoryWorst: sortedCategories[sortedCategories.length - 1],
+                    taskBest: sortedTasks[0],
+                    taskWorst: sortedTasks[sortedTasks.length - 1]
+                };
+            };
+
+            const bestWorst = findBestWorst();
+
+            // Duration type selector
+            const [durationType, setDurationType] = useState('all');
+            
+            const handleDurationChange = (e) => {
+                setDurationType(e.target.value);
+            };
+
+            // Find specialized strengths and weaknesses
+            const analyzeStrengthsByCategory = () => {
+                const categoryData = prepareCategoryData('all');
+                
+                // Calculate average difference across all categories
+                const avgDiff = categoryData.reduce((sum, item) => sum + item.diff, 0) / categoryData.length;
+                
+                // Find categories where one model clearly outperforms the other (more than 2x the average difference)
+                const specializedCategories = categoryData.filter(item => Math.abs(item.diff) > Math.abs(avgDiff * 2));
+                
+                return specializedCategories.sort((a, b) => b.diff - a.diff);
+            };
+            
+            const analyzeStrengthsByTask = () => {
+                const taskData = prepareTaskData('all');
+                
+                // Calculate average difference across all tasks
+                const avgDiff = taskData.reduce((sum, item) => sum + item.diff, 0) / taskData.length;
+                
+                // Find tasks where one model clearly outperforms the other (more than 2x the average difference)
+                const specializedTasks = taskData.filter(item => Math.abs(item.diff) > Math.abs(avgDiff * 2));
+                
+                return specializedTasks.sort((a, b) => b.diff - a.diff);
+            };
+            
+            // Generate data for performance trend analysis across durations
+            const prepareTrendData = () => {
+                // Get all task types
+                const taskTypes = Object.keys(withFramesData.tasks.all);
+                
+                const trendData = [];
+                
+                // For each task type, create a trend analysis
+                taskTypes.forEach(task => {
+                    const short = calcDifference(withFramesData.tasks.short[task], regularData.tasks.short[task]);
+                    const medium = calcDifference(withFramesData.tasks.medium[task], regularData.tasks.medium[task]);
+                    const long = calcDifference(withFramesData.tasks.long[task], regularData.tasks.long[task]);
+                    
+                    // Calculate a "consistency" metric - essentially how much variation exists
+                    const values = [short, medium, long];
+                    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+                    const variance = values.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / values.length;
+                    const consistency = 1 / (1 + variance); // Normalized to be between 0 and 1
+                    
+                    trendData.push({
+                        task,
+                        short,
+                        medium,
+                        long,
+                        consistency: parseFloat(consistency.toFixed(2)),
+                        trend: short < medium && medium < long ? 'improving' : 
+                            (short > medium && medium > long ? 'declining' : 'mixed')
+                    });
+                });
+                
+                return trendData.sort((a, b) => {
+                    // Sort by trend direction first, then by consistency
+                    if (a.trend !== b.trend) {
+                        if (a.trend === 'improving') return -1;
+                        if (b.trend === 'improving') return 1;
+                        if (a.trend === 'declining') return 1;
+                        if (b.trend === 'declining') return -1;
+                    }
+                    
+                    return b.consistency - a.consistency;
+                });
+            };
+            
+            const specializedCategories = analyzeStrengthsByCategory();
+            const specializedTasks = analyzeStrengthsByTask();
+            const trendData = prepareTrendData();
+
+            return (
+                <div className="p-4 bg-gray-50 min-h-screen">
+                    <div className="max-w-6xl mx-auto">
+                        <h1 className="text-3xl font-bold text-gray-800 mb-6">DeepSeek Performance Comparison Dashboard</h1>
+                        <p className="mb-4 text-gray-600">Comparing DeepSeek with frames vs Regular DeepSeek across different video durations and categories</p>
+                        
+                        <div className="mb-6 bg-white rounded-lg shadow p-4">
+                            <h2 className="text-xl font-bold mb-4">Summary</h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                <div className="bg-blue-50 p-4 rounded-md">
+                                    <h3 className="font-bold text-blue-800">Overall Performance</h3>
+                                    <p className="mt-2">DeepSeek with frames performs {withFramesData.overall.all > regularData.overall.all ? 'better' : 'worse'} overall 
+                                        ({withFramesData.overall.all.toFixed(1)}% vs {regularData.overall.all.toFixed(1)}%).</p>
+                                    <p className="mt-1">Difference: {calcDifference(withFramesData.overall.all, regularData.overall.all)}%</p>
+                                </div>
+                                <div className="bg-green-50 p-4 rounded-md">
+                                    <h3 className="font-bold text-green-800">Duration Analysis</h3>
+                                    <p className="mt-2">
+                                        <span className="font-semibold">Short videos:</span> With frames is {calcDifference(withFramesData.overall.short, regularData.overall.short) > 0 ? 'better' : 'worse'} by {Math.abs(calcDifference(withFramesData.overall.short, regularData.overall.short))}%
+                                    </p>
+                                    <p className="mt-1">
+                                        <span className="font-semibold">Medium videos:</span> With frames is {calcDifference(withFramesData.overall.medium, regularData.overall.medium) > 0 ? 'better' : 'worse'} by {Math.abs(calcDifference(withFramesData.overall.medium, regularData.overall.medium))}%
+                                    </p>
+                                    <p className="mt-1">
+                                        <span className="font-semibold">Long videos:</span> With frames is {calcDifference(withFramesData.overall.long, regularData.overall.long) > 0 ? 'better' : 'worse'} by {Math.abs(calcDifference(withFramesData.overall.long, regularData.overall.long))}%
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <div className="mb-6">
+                                <h3 className="text-lg font-bold mb-3">Specialized Strengths</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full bg-white border">
+                                        <thead>
+                                            <tr className="bg-gray-100">
+                                                <th className="py-2 px-4 border">Category/Task</th>
+                                                <th className="py-2 px-4 border">With Frames (%)</th>
+                                                <th className="py-2 px-4 border">Regular (%)</th>
+                                                <th className="py-2 px-4 border">Difference</th>
+                                                <th className="py-2 px-4 border">Better Model</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {specializedCategories.map((item, index) => (
+                                                <tr key={`cat-${index}`} className="bg-yellow-50">
+                                                    <td className="py-2 px-4 border font-medium">{item.name} (Category)</td>
+                                                    <td className="py-2 px-4 border text-center">{item.withFrames.toFixed(1)}</td>
+                                                    <td className="py-2 px-4 border text-center">{item.regular.toFixed(1)}</td>
+                                                    <td className={`py-2 px-4 border text-center font-bold ${item.diff > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                        {item.diff > 0 ? '+' : ''}{item.diff.toFixed(1)}
+                                                    </td>
+                                                    <td className="py-2 px-4 border text-center font-bold">
+                                                        {item.diff > 0 ? 'With Frames' : 'Regular'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {specializedTasks.map((item, index) => (
+                                                <tr key={`task-${index}`} className="bg-blue-50">
+                                                    <td className="py-2 px-4 border font-medium">{item.name} (Task)</td>
+                                                    <td className="py-2 px-4 border text-center">{item.withFrames.toFixed(1)}</td>
+                                                    <td className="py-2 px-4 border text-center">{item.regular.toFixed(1)}</td>
+                                                    <td className={`py-2 px-4 border text-center font-bold ${item.diff > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                        {item.diff > 0 ? '+' : ''}{item.diff.toFixed(1)}
+                                                    </td>
+                                                    <td className="py-2 px-4 border text-center font-bold">
+                                                        {item.diff > 0 ? 'With Frames' : 'Regular'}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-4 rounded-md bg-purple-50">
+                                    <h3 className="font-bold text-purple-800 mb-3">Performance Trend by Video Length</h3>
+                                    <p className="mb-2 text-sm">Tasks where there's a consistent trend as video length changes:</p>
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        {trendData.filter(item => item.trend === 'improving' || item.trend === 'declining')
+                                            .slice(0, 3)
+                                            .map((item, idx) => (
+                                                <li key={idx}>
+                                                    <span className="font-medium">{item.task}:</span> {item.trend === 'improving' ? 
+                                                        'With Frames gets progressively better as videos get longer' : 
+                                                        'With Frames gets progressively worse as videos get longer'} 
+                                                    (Consistency: {(item.consistency * 100).toFixed(0)}%)
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                                <div className="p-4 rounded-md bg-red-50">
+                                    <h3 className="font-bold text-red-800 mb-3">Key Insights</h3>
+                                    <ul className="list-disc pl-5 space-y-1">
+                                        <li><span className="font-medium">Best for Short Videos:</span> With Frames excels at {trendData.filter(t => t.short > 0).sort((a, b) => b.short - a.short)[0]?.task}</li>
+                                        <li><span className="font-medium">Best for Long Videos:</span> Regular DeepSeek performs better on {trendData.filter(t => t.long < 0).sort((a, b) => a.long - b.long)[0]?.task}</li>
+                                        <li><span className="font-medium">Most Consistent Advantage:</span> With Frames has the most reliable advantage in {trendData.filter(t => t.short > 0 && t.medium > 0 && t.long > 0).sort((a, b) => b.consistency - a.consistency)[0]?.task || 'No consistent advantage across all lengths'}</li>
+                                        <li><span className="font-medium">Duration Sensitivity:</span> {trendData.sort((a, b) => 
+                                                Math.abs(b.short - b.long) - Math.abs(a.short - a.long)
+                                            )[0]?.task} shows the most dramatic performance shift across video lengths</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="mb-6">
+                            <ul className="flex border-b border-gray-200">
+                                <li className="mr-1">
+                                    <button 
+                                        className={`py-2 px-4 rounded-t-lg ${activeTab === 'overview' ? 'bg-white border-l border-t border-r border-gray-200' : 'bg-gray-200'}`}
+                                        onClick={() => setActiveTab('overview')}>
+                                        Overview
+                                    </button>
+                                </li>
+                                <li className="mr-1">
+                                    <button 
+                                        className={`py-2 px-4 rounded-t-lg ${activeTab === 'categories' ? 'bg-white border-l border-t border-r border-gray-200' : 'bg-gray-200'}`}
+                                        onClick={() => setActiveTab('categories')}>
+                                        Video Categories
+                                    </button>
+                                </li>
+                                <li className="mr-1">
+                                    <button 
+                                        className={`py-2 px-4 rounded-t-lg ${activeTab === 'tasks' ? 'bg-white border-l border-t border-r border-gray-200' : 'bg-gray-200'}`}
+                                        onClick={() => setActiveTab('tasks')}>
+                                        Task Categories
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        {activeTab !== 'overview' && (
+                            <div className="mb-4">
+                                <label className="mr-2 font-medium">Video Duration:</label>
+                                <select 
+                                    value={durationType}
+                                    onChange={handleDurationChange}
+                                    className="border border-gray-300 rounded-md p-2">
+                                    <option value="all">All Durations</option>
+                                    <option value="short">Short</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="long">Long</option>
+                                </select>
+                            </div>
+                        )}
+                        
+                        <div className="bg-white rounded-lg shadow p-4">
+                            {activeTab === 'overview' && (
+                                <div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                        <div>
+                                            <h2 className="text-xl font-bold mb-4">Overall Performance by Duration</h2>
+                                            <div className="h-80">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart
+                                                        data={prepareOverallData()}
+                                                        margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                                                    >
+                                                        <CartesianGrid strokeDasharray="3 3" />
+                                                        <XAxis dataKey="name" />
+                                                        <YAxis domain={[30, 60]} />
+                                                        <Tooltip />
+                                                        <Legend />
+                                                        <Bar dataKey="withFrames" name="DeepSeek with Frames" fill="#8884d8" />
+                                                        <Bar dataKey="regular" name="Regular DeepSeek" fill="#82ca9d" />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                        
+                                        <div>
+                                            <h2 className="text-xl font-bold mb-4">Performance Gap by Duration</h2>
+                                            <div className="h-80">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <LineChart
+                                                        data={[
+                                                            { name: 'Short', diff: calcDifference(withFramesData.overall.short, regularData.overall.short) },
+                                                            { name: 'Medium', diff: calcDifference(withFramesData.overall.medium, regularData.overall.medium) },
+                                                            { name: 'Long', diff: calcDifference(withFramesData.overall.long, regularData.overall.long) }
+                                                        ]}
+                                                        margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                                                    >
+                                                        <CartesianGrid strokeDasharray="3 3" />
+                                                        <XAxis dataKey="name" />
+                                                        <YAxis domain={[-5, 5]} />
+                                                        <Tooltip />
+                                                        <Legend />
+                                                        <Line type="monotone" dataKey="diff" name="Performance Difference (+ favors With Frames)" stroke="#ff7300" activeDot={{ r: 8 }} />
+                                                        <Line type="monotone" y={0} stroke="#000000" strokeDasharray="3 3" dot={false} activeDot={false} />
+                                                    </LineChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                        <div>
+                                            <h2 className="text-xl font-bold mb-4">Task Type Performance Comparison</h2>
+                                            <div className="h-80">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <RadarChart outerRadius={90} data={prepareTaskData('all').slice(0, 6)}>
+                                                        <PolarGrid />
+                                                        <PolarAngleAxis dataKey="name" />
+                                                        <PolarRadiusAxis angle={30} domain={[0, 70]} />
+                                                        <Radar name="DeepSeek with Frames" dataKey="withFrames" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                                                        <Radar name="Regular DeepSeek" dataKey="regular" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+                                                        <Legend />
+                                                    </RadarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h2 className="text-xl font-bold mb-4">Video Category Performance Comparison</h2>
+                                            <div className="h-80">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <RadarChart outerRadius={90} data={prepareCategoryData('all')}>
+                                                        <PolarGrid />
+                                                        <PolarAngleAxis dataKey="name" />
+                                                        <PolarRadiusAxis angle={30} domain={[30, 60]} />
+                                                        <Radar name="DeepSeek with Frames" dataKey="withFrames" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
+                                                        <Radar name="Regular DeepSeek" dataKey="regular" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6} />
+                                                        <Legend />
+                                                    </RadarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mt-8 bg-white p-6 rounded-lg shadow-sm">
+                                        <h3 className="text-xl font-bold mb-4">Key Observations and Insights</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                            <div>
+                                                <h4 className="text-lg font-semibold mb-2 text-purple-800">Performance by Video Duration</h4>
+                                                <ul className="list-disc pl-5 space-y-2">
+                                                    <li><strong>Short Videos:</strong> DeepSeek with frames has a significant advantage (+{calcDifference(withFramesData.overall.short, regularData.overall.short)}%). This suggests that frame-based analysis provides superior context for shorter content where each frame matters more.</li>
+                                                    <li><strong>Medium Videos:</strong> Regular DeepSeek performs better by {Math.abs(calcDifference(withFramesData.overall.medium, regularData.overall.medium))}%. This could indicate that for medium-length videos, the additional frames may create noise rather than signal.</li>
+                                                    <li><strong>Long Videos:</strong> Regular DeepSeek maintains its advantage with {Math.abs(calcDifference(withFramesData.overall.long, regularData.overall.long))}% better performance. For longer videos, the frame-based approach may struggle with maintaining context across extended durations.</li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <h4 className="text-lg font-semibold mb-2 text-green-800">Specialized Strengths</h4>
+                                                <ul className="list-disc pl-5 space-y-2">
+                                                    <li><strong>DeepSeek with Frames excels at:</strong> Recognition tasks that benefit from detailed visual information in individual frames, particularly temporal perception (+{calcDifference(withFramesData.tasks.all["Temporal Perception"], regularData.tasks.all["Temporal Perception"])}%).</li>
+                                                    <li><strong>Regular DeepSeek excels at:</strong> Tasks requiring broader context integration like action reasoning and spatial perception, suggesting it may better capture video-wide patterns and relationships.</li>
+                                                    <li><strong>Content Type Impact:</strong> Frame-based analysis performs particularly well on Knowledge content (+{calcDifference(withFramesData.categories.all["Knowledge"], regularData.categories.all["Knowledge"])}%) but struggles with Sports Competition (-{Math.abs(calcDifference(withFramesData.categories.all["Sports Competition"], regularData.categories.all["Sports Competition"]))}%).</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div className="mt-6">
+                                            <h4 className="text-lg font-semibold mb-2 text-blue-800">Practical Application Recommendations</h4>
+                                            <ul className="list-disc pl-5 space-y-2">
+                                                <li><strong>Hybrid Approach:</strong> For optimal performance, use DeepSeek with frames for short videos and specific task types (Temporal Perception, Information Synopsis), but switch to Regular DeepSeek for medium/long videos and spatial/action reasoning tasks.</li>
+                                                <li><strong>Content-Specific Optimization:</strong> The data suggests distinct performance profiles based on content type. For Knowledge and Film & Television content, DeepSeek with frames offers advantages, while Regular DeepSeek performs better for Sports content.</li>
+                                                <li><strong>Performance Tradeoffs:</strong> The overall difference of {Math.abs(calcDifference(withFramesData.overall.all, regularData.overall.all))}% across all videos means the selection between models should be guided by specific use cases rather than general performance.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {activeTab === 'categories' && (
+                                <div>
+                                    <h2 className="text-xl font-bold mb-4">Video Categories Performance ({durationType === 'all' ? 'All Durations' : `${durationType.charAt(0).toUpperCase() + durationType.slice(1)} Videos`})</h2>
+                                    <div className="h-80">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                data={prepareCategoryData(durationType)}
+                                                margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                                            >
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="name" />
+                                                <YAxis domain={[30, 70]} />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar dataKey="withFrames" name="DeepSeek with Frames" fill="#8884d8" />
+                                                <Bar dataKey="regular" name="Regular DeepSeek" fill="#82ca9d" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="mt-6">
+                                        <h3 className="text-lg font-semibold mb-3">Category Insights</h3>
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full bg-white">
+                                                <thead>
+                                                    <tr className="bg-gray-100">
+                                                        <th className="py-2 px-4 border">Category</th>
+                                                        <th className="py-2 px-4 border">With Frames (%)</th>
+                                                        <th className="py-2 px-4 border">Regular (%)</th>
+                                                        <th className="py-2 px-4 border">Difference</th>
+                                                        <th className="py-2 px-4 border">Better Model</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {prepareCategoryData(durationType).map((item, index) => (
+                                                        <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                                                            <td className="py-2 px-4 border font-medium">{item.name}</td>
+                                                            <td className="py-2 px-4 border text-center">{item.withFrames.toFixed(1)}</td>
+                                                            <td className="py-2 px-4 border text-center">{item.regular.toFixed(1)}</td>
+                                                            <td className={`py-2 px-4 border text-center ${item.diff > 0 ? 'text-green-600' : (item.diff < 0 ? 'text-red-600' : '')}`}>
+                                                                {item.diff > 0 ? '+' : ''}{item.diff.toFixed(1)}
+                                                            </td>
+                                                            <td className="py-2 px-4 border text-center">
+                                                                {item.diff > 0 ? 'With Frames' : (item.diff < 0 ? 'Regular' : 'Equal')}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            
+                            {activeTab === 'tasks' && (
+                                <div>
+                                    <h2 className="text-xl font-bold mb-4">Task Categories Performance ({durationType === 'all' ? 'All Durations' : `${durationType.charAt(0).toUpperCase() + durationType.slice(1)} Videos`})</h2>
+                                    <div className="h-96">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart
+                                                data={prepareTaskData(durationType)}
+                                                margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                                                layout="vertical"
+                                            >
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis type="number" domain={[20, 80]} />
+                                                <YAxis dataKey="name" type="category" width={150} />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Bar dataKey="withFrames" name="DeepSeek with Frames" fill="#8884d8" />
+                                                <Bar dataKey="regular" name="Regular DeepSeek" fill="#82ca9d" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="mt-6">
+                                        <h3 className="text-lg font-semibold mb-3">Task Performance Analysis</h3>
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full bg-white">
+                                                <thead>
+                                                    <tr className="bg-gray-100">
+                                                        <th className="py-2 px-4 border">Task Type</th>
+                                                        <th className="py-2 px-4 border">With Frames (%)</th>
+                                                        <th className="py-2 px-4 border">Regular (%)</th>
+                                                        <th className="py-2 px-4 border">Difference</th>
+                                                        <th className="py-2 px-4 border">Better Model</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {prepareTaskData(durationType).map((item, index) => (
+                                                        <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                                                            <td className="py-2 px-4 border font-medium">{item.name}</td>
+                                                            <td className="py-2 px-4 border text-center">{item.withFrames.toFixed(1)}</td>
+                                                            <td className="py-2 px-4 border text-center">{item.regular.toFixed(1)}</td>
+                                                            <td className={`py-2 px-4 border text-center ${item.diff > 0 ? 'text-green-600' : (item.diff < 0 ? 'text-red-600' : '')}`}>
+                                                                {item.diff > 0 ? '+' : ''}{item.diff.toFixed(1)}
+                                                            </td>
+                                                            <td className="py-2 px-4 border text-center">
+                                                                {item.diff > 0 ? 'With Frames' : (item.diff < 0 ? 'Regular' : 'Equal')}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        // Wait for document ready
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log("DOM fully loaded, attempting to render React component");
+                ReactDOM.render(<DashboardApp />, document.getElementById('root'));
+            } catch(e) {
+                console.error("Error rendering React component:", e);
+                document.getElementById('root').innerHTML = `<div class="p-4 bg-red-100 text-red-800 rounded">Error: ${e.message}</div>`;
+            }
+        });
+
+        // Fallback render in case DOMContentLoaded was already fired
+        try {
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                console.log("Document already loaded, attempting immediate render");
+                ReactDOM.render(<DashboardApp />, document.getElementById('root'));
+            }
+        } catch(e) {
+            console.error("Error in fallback render:", e);
+        }
+    </script>
+
+    <!-- Add Console Output for Debugging -->
+    <div id="debug" class="mt-4 p-4 border-t border-gray-200 hidden">
+        <h3 class="font-bold">Debug Console:</h3>
+        <pre id="debug-output" class="bg-gray-100 p-2 mt-2 text-sm"></pre>
+    </div>
+    
+    <script>
+        // Override console.log to show outputs visibly on the page
+        (function(){
+            const originalConsoleLog = console.log;
+            const originalConsoleError = console.error;
+            
+            console.log = function() {
+                // Call original console.log
+                originalConsoleLog.apply(console, arguments);
+                
+                // Add to visible debug area
+                const debugOutput = document.getElementById('debug-output');
+                const debugArea = document.getElementById('debug');
+                
+                if (debugOutput && debugArea) {
+                    debugArea.classList.remove('hidden');
+                    const args = Array.from(arguments);
+                    debugOutput.textContent += args.map(arg => 
+                        typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg
+                    ).join(' ') + '\n';
+                }
+            };
+            
+            console.error = function() {
+                // Call original console.error
+                originalConsoleError.apply(console, arguments);
+                
+                // Add to visible debug area with error styling
+                const debugOutput = document.getElementById('debug-output');
+                const debugArea = document.getElementById('debug');
+                
+                if (debugOutput && debugArea) {
+                    debugArea.classList.remove('hidden');
+                    const args = Array.from(arguments);
+                    debugOutput.innerHTML += '<span class="text-red-600">' + 
+                        args.map(arg => typeof arg === 'object' ? JSON.stringify(arg, null, 2) : arg).join(' ') + 
+                        '</span>\n';
+                }
+            };
+        })();
+    </script>
+</body>
+</html>
