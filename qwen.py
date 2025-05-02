@@ -10,6 +10,8 @@ from transformers import AutoProcessor
 from vllm import SamplingParams
 from transformers import CLIPProcessor, CLIPModel
 import glob
+import base64
+from io import BytesIO
 import subprocess
 import vllm
 import time
@@ -120,8 +122,6 @@ def get_embeddings(model, processor, image_path):
             prompt = f"<image>\nGenerate embedding for this image."
             
             # Кодируем изображение в base64
-            import base64
-            from io import BytesIO
             buffer = BytesIO()
             image.save(buffer, format="JPEG")
             img_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
